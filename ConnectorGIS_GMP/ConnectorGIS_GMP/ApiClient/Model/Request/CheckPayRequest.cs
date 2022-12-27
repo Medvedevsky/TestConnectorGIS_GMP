@@ -1,16 +1,31 @@
 ﻿using ConnectorGIS_GMP.ApiClient.Enum;
 
-namespace ConnectorGIS_GMP.ApiClient.Model
+namespace ConnectorGIS_GMP.ApiClient.Model.Request
 {
     /// <summary>
     /// Модель передаваемая в метод CheckPay.
     /// Больше инфы в API - https://shtraf.biz/API_shtraf.biz_Manual.pdf
     /// </summary>
-    public class CheckPay
+    public class CheckPayRequest
     {
+        /// <summary>
+        /// Тип операции 1 = поиск начислений.
+        /// </summary>
         public int Top { get; set; } = 1;
+
+        /// <summary>
+        /// Идентификатор Партнера.
+        /// </summary>
         public string Id { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Подпись запроса.
+        /// </summary>
         public string Hash { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Тип поиска.
+        /// </summary>
         public TypeSearch Type { get; set; }
 
         /// <summary>
@@ -53,7 +68,7 @@ namespace ConnectorGIS_GMP.ApiClient.Model
         /// <summary>
         ///  Серия и номер паспорта
         ///  Необязательное поле,если в запросе присутствует поле inn или snils или vu или sts.
-        /// Поле передается только при type==10 и type==24 .
+        ///  Поле передается только при type==10 и type==24 .
         /// </summary>
         public string? Pasp { get; set; }
 
