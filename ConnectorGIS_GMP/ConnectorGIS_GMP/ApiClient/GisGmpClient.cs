@@ -1,6 +1,5 @@
 ﻿using ConnectorGIS_GMP.ApiClient.Model.Request;
 using ConnectorGIS_GMP.ApiClient.Model.Response;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -39,13 +38,12 @@ namespace ConnectorGIS_GMP.ApiClient
                 string requestData = JsonSerializer.Serialize(request, JsonSerializerOptions);
                 HttpRequestMessage message = new(HttpMethod.Post, requestUrl)
                 {
-                    Content = new StringContent(requestData),
+                    Content = new StringContent(requestData, Encoding.UTF8, "application/json"),
                 };
-                message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json")
-                {
-                    CharSet = Encoding.UTF8.WebName
-                };
-
+                //message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json")
+                //{
+                //    CharSet = Encoding.UTF8.WebName
+                //};
                 HttpResponseMessage response = _client.SendAsync(message).Result;
                 response.EnsureSuccessStatusCode();
 
@@ -65,8 +63,13 @@ namespace ConnectorGIS_GMP.ApiClient
 
         private static string CreateMD5Hash(string data)
         {
-            byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(data));
-            return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            //byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(data));
+            //return BitConverter.ToString(hash).Replace("-", "");
+
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
+
+            return Convert.ToBase64String(hash);
         }
     }
 }

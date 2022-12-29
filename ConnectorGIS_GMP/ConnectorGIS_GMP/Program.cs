@@ -1,4 +1,5 @@
 using ConnectorGIS_GMP.ApiClient;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +13,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<GisGmpClient>(client =>
 {
-    client.BaseAddress = new Uri("https://www.elpas.ru/api.php");
-
-    //client.DefaultRequestHeaders.Add(
-    //            HeaderNames.UserAgent, "ExchangeRateViewer");
+    client.BaseAddress = new Uri("https://elpas.ru/api109731.php");
+    client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+    //client.DefaultRequestHeaders.TryAddWithoutValidation(new MediaTypeHeaderValue("application/json")
+    //{
+    //    CharSet = Encoding.UTF8.WebName
+    //});
 });
 
 var app = builder.Build();

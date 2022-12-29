@@ -16,7 +16,7 @@ namespace ConnectorGIS_GMP.ApiClient.Model.Request
         /// <summary>
         /// Идентификатор Партнера.
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = "109731.1.03";
 
         /// <summary>
         /// Подпись запроса.
