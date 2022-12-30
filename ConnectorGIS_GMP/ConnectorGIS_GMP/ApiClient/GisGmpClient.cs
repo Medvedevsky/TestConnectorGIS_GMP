@@ -3,6 +3,7 @@ using ConnectorGIS_GMP.ApiClient.Model.Response;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace ConnectorGIS_GMP.ApiClient
 {
@@ -15,7 +16,6 @@ namespace ConnectorGIS_GMP.ApiClient
 
         private static readonly JsonSerializerOptions JsonSerializerOptions = new()
         {
-            //PropertyNamingPolicy = JsonNamingPolicy.CamelCase 
             PropertyNameCaseInsensitive = true,
             AllowTrailingCommas = true,
         };
@@ -32,26 +32,23 @@ namespace ConnectorGIS_GMP.ApiClient
         {
             try
             {
-                request.Hash = CreateMD5Hash($"{request.Id}.{request.Top}.{_key}");
+                request.Hash = CreateMD5Hash($"{request.Id}{request.Top}{_key}");
 
-                string requestUrl = $"{_client.BaseAddress}/checkPay";
-                string requestData = JsonSerializer.Serialize(request, JsonSerializerOptions);
+                string requestUrl = $"{_client.BaseAddress}";
+                var data = GeneratePostForm(request);
                 HttpRequestMessage message = new(HttpMethod.Post, requestUrl)
                 {
-                    Content = new StringContent(requestData, Encoding.UTF8, "application/json"),
+                    Content = new FormUrlEncodedContent(data),
                 };
-                //message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json")
-                //{
-                //    CharSet = Encoding.UTF8.WebName
-                //};
+
                 HttpResponseMessage response = _client.SendAsync(message).Result;
                 response.EnsureSuccessStatusCode();
 
-                string responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine($"Найденные начисления: {responseContent}");
+                Console.WriteLine($"Найденные начисления: {Regex.Unescape(responseContent)}");
 
-                CheckPayResponse res = JsonSerializer.Deserialize<CheckPayResponse>(responseContent, JsonSerializerOptions);
+                CheckPayResponse res = JsonSerializer.Deserialize<CheckPayResponse>(Regex.Unescape(responseContent), JsonSerializerOptions);
                 return res;
             }
             catch (Exception ex)
@@ -63,13 +60,29 @@ namespace ConnectorGIS_GMP.ApiClient
 
         private static string CreateMD5Hash(string data)
         {
-            //byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(data));
-            //return BitConverter.ToString(hash).Replace("-", "");
+            byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(data));
+            return BitConverter.ToString(hash).Replace("-", "").ToLower();
+        }
 
-            var md5 = MD5.Create();
-            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(data));
+        private Dictionary<string, string> GeneratePostForm(CheckPayRequest request)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>
+            {
+                ["top"] = request.Top.ToString(),
+                ["id"] = request.Id,
+                ["hash"] = request.Hash,
+                ["type"] = request.Type.ToString(),
+                ["sts"] = request.Sts,
+                ["paid"] = request.Paid.ToString(),
+                ["inn"] = request.Inn,
+                ["snils"] = request.Snils,
+                ["vu"] = request.Vu,
+                ["num"] = request.Num,
+                ["pasp"] = request.Pasp,
+                ["ind"] = request.Ind,
+            };
 
-            return Convert.ToBase64String(hash);
+            return data;
         }
     }
 }
