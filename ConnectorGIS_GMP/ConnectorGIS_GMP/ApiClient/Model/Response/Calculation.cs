@@ -5,17 +5,17 @@
         /// <summary>
         /// Сумма начислений к оплате.
         /// </summary>
-        public string Sum { get; set; }
+        public decimal Sum { get; set; }
 
         /// <summary>
         /// Первоначальная сумма начисления.
         /// </summary>
-        public string? SumPay { get; set; }
+        public decimal SumPay { get; set; }
 
         /// <summary>
         /// Признак оплаты начисления true (или 1,2,3) - оплачен, false (или 0) - неоплачен.
         /// </summary>
-        public bool IsPaid { get; set; }
+        public int IsPaid { get; set; }
 
         /// <summary>
         /// Дополнительная информация о начислении.
@@ -50,7 +50,7 @@
         /// <summary>
         /// Размер действующей скидки в % на оплату штрафа (для начислений type==10).
         /// </summary>
-        public string? DiscountSize { get; set; }
+        public decimal? DiscountSize { get; set; }
 
         /// <summary>
         /// Дата, при оплате до которой действует скидка на оплату штрафа (для начислений type==10).
@@ -60,7 +60,7 @@
         /// <summary>
         /// Общая сумма штрафа (без учета скидки). Может совпадать с полем sum, если скидки нет(например штраф просрочен).
         /// </summary>
-        public string TotalAmount { get; set; }
+        public decimal TotalAmount { get; set; }
 
         /// <summary>
         /// Url на страницу загрузки фото с места правонарушения. Только при поиске штрафов ГИБДД.

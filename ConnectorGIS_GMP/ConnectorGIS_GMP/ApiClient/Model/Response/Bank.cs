@@ -2,7 +2,7 @@
 {
     public class Bank
     {
-        public string Soiname { get; set; }
+        public string? Soiname { get; set; }
         public string Inn { get; set; }
         public string Kpp { get; set; }
         public string Acc { get; set; }
