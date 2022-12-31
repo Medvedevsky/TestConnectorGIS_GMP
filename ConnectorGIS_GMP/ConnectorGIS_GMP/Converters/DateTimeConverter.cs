@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ConnectorGIS_GMP.Converts
+namespace ConnectorGIS_GMP.Converters
 {
     public class DateTimeConverter : JsonConverter<DateTime>
     {
