@@ -1,5 +1,6 @@
 ﻿using ConnectorGIS_GMP.ApiClient.Model.Request;
 using ConnectorGIS_GMP.ApiClient.Model.Response;
+using ConnectorGIS_GMP.Converts;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -26,6 +27,7 @@ namespace ConnectorGIS_GMP.ApiClient
         public GisGmpClient(HttpClient сlient)
         {
             _client = сlient;
+            //JsonSerializerOptions.Converters.Add(new DateTimeConverter());
         }
 
         public async Task<CheckPayResponse?> Search(CheckPayRequest request)
@@ -71,15 +73,15 @@ namespace ConnectorGIS_GMP.ApiClient
                 ["top"] = request.Top.ToString(),
                 ["id"] = request.Id,
                 ["hash"] = request.Hash,
-                ["type"] = request.Type.ToString(),
-                ["sts"] = request.Sts,
+                ["type"] = ((int)request.Type).ToString(),
+                ["sts"] = request.Sts!,
                 ["paid"] = request.Paid.ToString(),
-                ["inn"] = request.Inn,
-                ["snils"] = request.Snils,
-                ["vu"] = request.Vu,
-                ["num"] = request.Num,
-                ["pasp"] = request.Pasp,
-                ["ind"] = request.Ind,
+                ["inn"] = request.Inn!,
+                ["snils"] = request.Snils!,
+                ["vu"] = request.Vu!,
+                ["num"] = request.Num!,
+                ["pasp"] = request.Pasp!,
+                ["ind"] = request.Ind!,
             };
 
             return data;
