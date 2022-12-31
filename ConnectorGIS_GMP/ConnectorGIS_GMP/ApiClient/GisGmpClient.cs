@@ -19,15 +19,15 @@ namespace ConnectorGIS_GMP.ApiClient
         {
             PropertyNameCaseInsensitive = true,
             AllowTrailingCommas = true,
+            Converters = { new DateTimeConverter() }
         };
 
         //NOTE: API KEY
-        private readonly string _key = "";
+        private static readonly string _key = "";
 
         public GisGmpClient(HttpClient сlient)
         {
             _client = сlient;
-            //JsonSerializerOptions.Converters.Add(new DateTimeConverter());
         }
 
         public async Task<CheckPayResponse?> Search(CheckPayRequest request)
@@ -50,7 +50,7 @@ namespace ConnectorGIS_GMP.ApiClient
 
                 Console.WriteLine($"Найденные начисления: {Regex.Unescape(responseContent)}");
 
-                CheckPayResponse res = JsonSerializer.Deserialize<CheckPayResponse>(Regex.Unescape(responseContent), JsonSerializerOptions);
+                CheckPayResponse res = JsonSerializer.Deserialize<CheckPayResponse>(Regex.Unescape(responseContent), JsonSerializerOptions)!;
                 return res;
             }
             catch (Exception ex)
@@ -66,9 +66,11 @@ namespace ConnectorGIS_GMP.ApiClient
             return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
 
-        private Dictionary<string, string> GeneratePostForm(CheckPayRequest request)
+        private static Dictionary<string, string> GeneratePostForm(CheckPayRequest request)
         {
-            Dictionary<string, string> data = new Dictionary<string, string>
+            if (request is null) throw new ArgumentNullException($"Параметра метода {nameof(GeneratePostForm)} является null");
+
+            return new Dictionary<string, string>
             {
                 ["top"] = request.Top.ToString(),
                 ["id"] = request.Id,
@@ -83,8 +85,6 @@ namespace ConnectorGIS_GMP.ApiClient
                 ["pasp"] = request.Pasp!,
                 ["ind"] = request.Ind!,
             };
-
-            return data;
         }
     }
 }
