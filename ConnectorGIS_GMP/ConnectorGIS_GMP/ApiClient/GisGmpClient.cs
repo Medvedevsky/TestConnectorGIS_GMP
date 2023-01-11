@@ -1,6 +1,7 @@
 ﻿using ConnectorGIS_GMP.ApiClient.Model.Request;
 using ConnectorGIS_GMP.ApiClient.Model.Response;
 using ConnectorGIS_GMP.Converters;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -68,23 +69,24 @@ namespace ConnectorGIS_GMP.ApiClient
 
         private static Dictionary<string, string> GeneratePostForm(CheckPayRequest request)
         {
-            if (request is null) throw new ArgumentNullException($"Параметра метода {nameof(GeneratePostForm)} является null");
+            if (request is null) 
+                throw new ArgumentNullException($"Параметра метода {nameof(GeneratePostForm)} является null");
 
-            return new Dictionary<string, string>
+            var result = new Dictionary<string, string>();
+            Type type = typeof(CheckPayRequest);
+
+            foreach (PropertyInfo p in type.GetProperties())
             {
-                ["top"] = request.Top.ToString(),
-                ["id"] = request.Id,
-                ["hash"] = request.Hash,
-                ["type"] = ((int)request.Type).ToString(),
-                ["sts"] = request.Sts!,
-                ["paid"] = request.Paid.ToString(),
-                ["inn"] = request.Inn!,
-                ["snils"] = request.Snils!,
-                ["vu"] = request.Vu!,
-                ["num"] = request.Num!,
-                ["pasp"] = request.Pasp!,
-                ["ind"] = request.Ind!,
-            };
+                object value = p.GetValue(request)!;
+                string a = p.Name;
+
+                if (value is not null && string.IsNullOrEmpty(value.ToString()) == false)
+                {
+                    result.Add(p.Name.ToLower(), value.ToString()!);
+                }
+            }
+
+            return result;
         }
     }
 }

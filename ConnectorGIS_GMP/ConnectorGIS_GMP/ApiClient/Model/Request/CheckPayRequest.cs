@@ -23,9 +23,9 @@ namespace ConnectorGIS_GMP.ApiClient.Model.Request
         public string Hash { get; set; } = string.Empty;
 
         /// <summary>
-        /// Тип поиска.
+        /// Тип поиска. 10 - штрафы, 21 - налоги, 24 - фссп
         /// </summary>
-        public TypeSearch Type { get; set; }
+        public int Type { get; set; }
 
         /// <summary>
         /// Номер водительского удостоверения.
