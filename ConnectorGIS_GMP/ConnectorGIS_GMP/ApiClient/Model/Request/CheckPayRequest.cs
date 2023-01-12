@@ -82,5 +82,10 @@ namespace ConnectorGIS_GMP.ApiClient.Model.Request
         /// 1 - искать оплаченные и неоплаченные начисления.
         /// </summary>
         public int Paid { get; set; } = 0;
+
+        /// <summary>
+        /// Номер постановление 
+        /// </summary>
+        public string? Ps { get; set; }
     }
 }
