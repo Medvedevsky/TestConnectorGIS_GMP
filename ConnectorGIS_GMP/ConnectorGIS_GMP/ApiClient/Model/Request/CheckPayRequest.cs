@@ -17,6 +17,7 @@ namespace ConnectorGIS_GMP.ApiClient.Model.Request
         /// Идентификатор Партнера.
         /// </summary>
         public string Id { get; set; } = "109731.1.03";
+
         /// <summary>
         /// Подпись запроса.
         /// </summary>
@@ -40,6 +41,7 @@ namespace ConnectorGIS_GMP.ApiClient.Model.Request
         /// Обязательное поле, если в запросе присутствует поле num.
         /// </summary>
         public string? Sts { get; set; }
+
         /// <summary>
         /// Реквииты организации ИП для поиска штрафов ГИБДД.(Смотреть АПИ).
         /// </summary>
