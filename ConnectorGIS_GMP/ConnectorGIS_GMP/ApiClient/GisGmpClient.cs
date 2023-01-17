@@ -75,6 +75,7 @@ namespace ConnectorGIS_GMP.ApiClient
             var result = new Dictionary<string, string>();
             Type type = typeof(CheckPayRequest);
 
+            // NOTE: заполняем модель данных полями, которые имеют значения
             foreach (PropertyInfo p in type.GetProperties())
             {
                 object value = p.GetValue(request)!;
