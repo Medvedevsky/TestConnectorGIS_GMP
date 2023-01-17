@@ -1,4 +1,5 @@
-﻿using ConnectorGIS_GMP.ApiClient.Model.Request;
+﻿using ConnectorGIS_GMP.ApiClient.Model;
+using ConnectorGIS_GMP.ApiClient.Model.Request;
 using ConnectorGIS_GMP.ApiClient.Model.Response;
 using ConnectorGIS_GMP.Converters;
 using System.Reflection;
@@ -24,14 +25,14 @@ namespace ConnectorGIS_GMP.ApiClient
         };
 
         //NOTE: API KEY
-        private static readonly string _key = "";
+        private static readonly string _key = "JH6R98hj&%gFhsf*(jCvs";
 
         public GisGmpClient(HttpClient сlient)
         {
             _client = сlient;
         }
 
-        public async Task<CheckPayResponse?> Search(CheckPayRequest request)
+        public async Task<(CheckPayResponse?, ResponseError)> Search(CheckPayRequest request)
         {
             try
             {
@@ -51,13 +52,20 @@ namespace ConnectorGIS_GMP.ApiClient
 
                 Console.WriteLine($"Найденные начисления: {Regex.Unescape(responseContent)}");
 
-                CheckPayResponse res = JsonSerializer.Deserialize<CheckPayResponse>(Regex.Unescape(responseContent), JsonSerializerOptions)!;
-                return res;
+                ResponseError err = JsonSerializer.Deserialize<ResponseError>(Regex.Unescape(responseContent), JsonSerializerOptions)!;
+
+                if(err.Err == 0) 
+                {
+                    CheckPayResponse res = JsonSerializer.Deserialize<CheckPayResponse>(Regex.Unescape(responseContent), JsonSerializerOptions)!;
+                    return (res, err);
+                }
+
+                return (null, err);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Произошла ошибка: {ex}");
-                return null;
+                return (null, null);
             }
         }
 
@@ -67,13 +75,13 @@ namespace ConnectorGIS_GMP.ApiClient
             return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
 
-        private static Dictionary<string, string> GeneratePostForm(CheckPayRequest request)
+        private static Dictionary<string, string> GeneratePostForm<T>(T request)
         {
             if (request is null) 
                 throw new ArgumentNullException($"Параметра метода {nameof(GeneratePostForm)} является null");
 
             var result = new Dictionary<string, string>();
-            Type type = typeof(CheckPayRequest);
+            Type type = typeof(T);
 
             // NOTE: заполняем модель данных полями, которые имеют значения
             foreach (PropertyInfo p in type.GetProperties())
