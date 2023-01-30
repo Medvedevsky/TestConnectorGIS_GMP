@@ -1,5 +1,4 @@
-﻿using ConnectorGIS_GMP.ApiClient.Model;
-using ConnectorGIS_GMP.ApiClient.Model.Request;
+﻿using ConnectorGIS_GMP.ApiClient.Model.Request;
 using ConnectorGIS_GMP.ApiClient.Model.Response;
 using ConnectorGIS_GMP.Converters;
 using System.Reflection;
@@ -54,7 +53,7 @@ namespace ConnectorGIS_GMP.ApiClient
 
                 ResponseError err = JsonSerializer.Deserialize<ResponseError>(Regex.Unescape(responseContent), JsonSerializerOptions)!;
 
-                if(err.Err == 0) 
+                if (err.Err == 0)
                 {
                     CheckPayResponse res = JsonSerializer.Deserialize<CheckPayResponse>(Regex.Unescape(responseContent), JsonSerializerOptions)!;
                     return (res, err);

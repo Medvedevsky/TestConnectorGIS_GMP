@@ -1,4 +1,4 @@
-﻿namespace ConnectorGIS_GMP.ApiClient.Model
+﻿namespace ConnectorGIS_GMP.ApiClient.Model.Response
 {
     public class ResponseError
     {
