@@ -24,7 +24,7 @@ namespace ConnectorGIS_GMP.ApiClient
         };
 
         //NOTE: API KEY
-        private static readonly string _key = "JH6R98hj&%gFhsf*(jCvs";
+        private static readonly string _key = "";
 
         public GisGmpClient(HttpClient сlient)
         {
