@@ -86,7 +86,6 @@ namespace ConnectorGIS_GMP.ApiClient
             foreach (PropertyInfo p in type.GetProperties())
             {
                 object value = p.GetValue(request)!;
-                string a = p.Name;
 
                 if (value is not null && string.IsNullOrEmpty(value.ToString()) == false)
                 {
